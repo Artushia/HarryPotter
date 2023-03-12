@@ -1,61 +1,75 @@
-import java.util.Arrays;
-import java.util.Locale;
+import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
-
-import static java.lang.System.in;
 
 public class Logic {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         exeGame();
     }
 
-    public static void exeGame() {
-        createCharacter();
-    }
-
-    //Defines the feature of the wizard
-    public static void createCharacter() {
-
+    public static void exeGame() throws IOException {
+        //Instantiate the wizard's and enemy's classes
         Wizard wizard = new Wizard();
+        Enemy enemy1 = new Enemy("Troll", 100);
 
-        //Set Name
-        System.out.println("Hello! What is the name of your wizard? ");
-        Scanner sc = new Scanner(in);
-        wizard.setName(sc.next());
-
-        //Set Wand
-        int size = 0;
-        while ((size > 36) || (size < 24)) {
-            System.out.println("Choose a size between 24 and 36 cm for your wand: ");
-            size = sc.nextInt();}
-        System.out.println("Enter the number corresponding to the desired core: ");
-        for (int i=0; i<Core.values().length; i++) {
-            System.out.println(i + " -> " + Core.values()[i]);}
-        //Checks if value entered by user is correct
-        int index = Core.values().length;
-        while (index > Core.values().length - 1) {
-            index = sc.nextInt();}
-        Core core = Core.values()[index];
-        wizard.setWand(new Wand(core,size));
-
-        //Set House
-        SortingHat sortingHat = new SortingHat();
-        wizard.setHouse(sortingHat.pickHouse());
-
-        //Set Pet
-        System.out.println("Enter the number corresponding to the desired pet: ");
-        for (int i=0; i<Pet.values().length; i++) {
-            System.out.println(i + " -> " + Pet.values()[i]);}
-        //Checks if value entered by user is correct
-        int chooseValue = Pet.values().length;
-        while (chooseValue > Pet.values().length - 1) {
-            chooseValue = sc.nextInt();}
-        Pet pet = Pet.values()[chooseValue];
-        wizard.setPet(pet);
-
-        //TEST
-        System.out.println(wizard);
+        //Level 1
+        clearConsole();
+        Story.firstAct();
+        while (wizard.hp > 0) {
+            while (enemy1.hp > 0) {
+                exeLevel(wizard,enemy1, 20);
+            }
+            Story.winAgainstBoss("Troll", 2);
+            break;
+        }
     }
+
+    //General method for the levels
+    public static void exeLevel(Wizard wizard, Enemy enemy, int enemyDamage) throws IOException {
+        Spell trollSpell = new Spell("trollSpell", 100, enemyDamage);
+        System.out.println("Your turn to attack ! ");
+        System.out.println("Which spell do you want to use ? (Enter the correct number)");
+        wizard.attack(wizard.knownSpells.get(listOptions(wizard.knownSpells)), enemy);
+        enemy.attack(trollSpell, wizard);
+        System.out.println("The troll's health is " + enemy.hp);
+        System.out.println("He also attacked you ! Your remaining health is " + wizard.hp);
+        enterToContinue();
+    }
+
+    //Method to list different options and verify correct input
+    public static int listOptions(List list) {
+        Scanner sc = new Scanner(System.in);
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(i + " -> " + list.get(i));
+        }
+        int chooseValue = list.size();
+        while (chooseValue > list.size() - 1) {
+            chooseValue = sc.nextInt();
+        }
+        return chooseValue;
+    }
+
+    //Method to stop the game until users presses a key
+    public static void enterToContinue() throws IOException {
+        System.out.println("Press ENTER key to continue...");
+        System.in.read();
+    }
+
+    //Method to print a seperator with length n from @CodeStudent on Youtube
+    public static void printSeperator(int n) {
+        for (int i =0; i < n ; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+    }
+
+    //Method to simulate clearing out the console from @CodeStudent on Youtube
+    public static void clearConsole() {
+        for (int i = 0; i < 100; i ++) {
+            System.out.println();
+        }
+    }
+
 
 }
