@@ -73,7 +73,7 @@ public class Wizard extends Character{
         this.hp = 100;
 
         //adds Wanguardium Leviosa by default at beginning of game
-        Spell Leviosa = new Spell("Wanguardium Leviosa", 0.7, 25);
+        Spell Leviosa = new Spell("Wanguardium Leviosa", 0.85, 25);
         knownSpells.add(Leviosa);
     }
 

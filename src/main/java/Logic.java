@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Logic {
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
         exeGame();
@@ -27,9 +28,25 @@ public class Logic {
 
     //General method for the levels
     public static void exeLevel(Wizard wizard, Enemy enemy, int enemyDamage) throws IOException {
-        Spell trollSpell = new Spell("trollSpell", 100, enemyDamage);
+        Spell trollSpell = new Spell("trollSpell", 0.95, enemyDamage);
         System.out.println("Your turn to attack ! ");
         System.out.println("Which spell do you want to use ? (Enter the correct number)");
+
+        String wizardHouse = wizard.house.toString();
+
+        //Specificity for RAVENCLAW house - are more precise
+        if (wizardHouse.equals("RAVENCLAW")) {
+            for (int i=0; i < wizard.knownSpells.size(); i++) {
+                double spellSuccess = wizard.knownSpells.get(i).percentSuccess;
+                if (spellSuccess < 0.95) {spellSuccess += 0.05;}
+            }
+
+        //Specificity for SLYTHERIN house - do higher damage
+        } else if (wizardHouse.equals("SLYTHERIN")) {
+            for (int i = 0; i < wizard.knownSpells.size(); i++) {
+                wizard.knownSpells.get(i).damage += 5;}
+        }
+
         wizard.attack(wizard.knownSpells.get(listOptions(wizard.knownSpells)), enemy);
         enemy.attack(trollSpell, wizard);
         System.out.println("The troll's health is " + enemy.hp);
@@ -39,7 +56,6 @@ public class Logic {
 
     //Method to list different options and verify correct input
     public static int listOptions(List list) {
-        Scanner sc = new Scanner(System.in);
         for (int i = 0; i < list.size(); i++) {
             System.out.println(i + " -> " + list.get(i));
         }

@@ -12,7 +12,6 @@ public class SortingHat {
         houses.add(new House("GRYFFINDOR"));
         houses.add(new House("SLYTHERIN"));
         houses.add(new House("HUFFLEPUFF"));
-
     }
 
     public House pickHouse() {
