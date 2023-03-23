@@ -1,11 +1,22 @@
-package org.isep.java;
+package org.isep.java.controller;
+
+import org.isep.java.model.Character;
+import org.isep.java.model.Enemy;
+import org.isep.java.model.Spell;
+import org.isep.java.model.Wizard;
+import org.isep.java.view.Story;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
+
 public class Logic {
-    static Scanner sc = new Scanner(System.in);
+
+    private static Scanner sc = new Scanner(System.in);
+    private static Random rand = new Random();
+
 
     public static void main(String[] args) throws IOException {
         exeGame();
@@ -21,10 +32,11 @@ public class Logic {
         //org.isep.java.Level 1
         clearConsole();
         Story.firstAct();
-        System.out.println("Your current health: " + wizard.hp);
-        while (wizard.hp > 0) {
-            wizard.checkHouseForSpecificity();
-            while (enemy1.hp > 0) {
+        System.out.println("Your current health: " + wizard.getHp());
+        while (wizard.getHp() > 0) {
+            checkHouseForSpecificity(wizard);
+            System.out.println("Percentage of success is " + wizard.getKnownSpells().get(0).getPercentSuccess());
+            while (enemy1.getHp() > 0) {
                 exeLevel(wizard,enemy1);
             }
             Story.winAgainstBoss("Troll", 2);
@@ -32,12 +44,29 @@ public class Logic {
             //org.isep.java.Level 2
             clearConsole();
             Story.secondAct();
-            System.out.println("Your current health: " + wizard.hp);
-            while (enemy2.hp > 0) {
+            System.out.println("Your current health: " + wizard.getHp());
+            while (enemy2.getHp() > 0) {
                 exeLevel(wizard, enemy2);
             }
 
         }
+    }
+    //checks for house type and adds specificity
+    public static void checkHouseForSpecificity(Wizard wizard) {
+        //Specificity for RAVENCLAW house - are more precise
+        if (wizard.getHouse().toString().equals("RAVENCLAW")) {
+            for (int i=0; i < wizard.getKnownSpells().size(); i++) {
+                Spell spell = wizard.getKnownSpells().get(i);
+                double spellSuccess = spell.getPercentSuccess();
+                if (spellSuccess < 0.95) {
+                    spellSuccess += 0.05;
+                    spell.setPercentSuccess(spellSuccess);
+                }
+            }
+
+            //Specificity for SLYTHERIN house - do higher damage
+        } else if (wizard.getHouse().toString().equals("SLYTHERIN")) {
+            wizard.setDamage(wizard.getDamage() + 5);}
     }
 
     //General method for the levels
@@ -47,17 +76,17 @@ public class Logic {
         System.out.println("Which spell do you want to use ? (Enter the correct number)");
 
         //Shows the damage you infliged to the Troll for each attack
-        int health = enemy.hp;
-        Character.attack(wizard.knownSpells.get(listOptions(wizard.knownSpells)), wizard, enemy);
-        int damage = health - enemy.hp;
+        int health = enemy.getHp();
+        attack(wizard.getKnownSpells().get(listOptions(wizard.getKnownSpells())), wizard, enemy);
+        int damage = health - enemy.getHp();
         if (damage == 0) {
             System.out.println("Your spell missed the troll!");
         } else {
             System.out.println("You inflicted " + damage + " of damage towards the Troll");}
-        if (enemy.hp > 0) {
-            Character.attack(trollSpell, enemy, wizard);
-            System.out.println("The troll's health is " + enemy.hp);
-            System.out.println("He also attacked you ! Your remaining health is " + wizard.hp);
+        if (enemy.getHp() > 0) {
+            attack(trollSpell, enemy, wizard);
+            System.out.println("The troll's health is " + enemy.getHp());
+            System.out.println("He also attacked you ! Your remaining health is " + wizard.getHp());
             enterToContinue();
         }
     }
@@ -69,9 +98,9 @@ public class Logic {
             System.out.println("Enter either 1 or 2: ");
             choice = sc.nextInt();}
         if (choice == 1) {
-            wizard.hp += 20;
+            wizard.setHp(wizard.getHp() - 20);
         } else {
-            wizard.damage += 10;
+            wizard.setDamage(wizard.getDamage() + 10);
         }
         printSeperator(60);
     }
@@ -107,6 +136,24 @@ public class Logic {
         for (int i = 0; i < 100; i ++) {
             System.out.println();
         }
+    }
+
+    public static void attack(Spell spellName, Character attacker, Character defender) {
+
+        int bonus = 0;
+        //Specificity of GRYFFINDOR house -> higher resistance from damage
+        if (defender instanceof Wizard) {
+            if (((Wizard) defender).getHouse().toString().equals("GRYFFINDOR")) {
+                bonus = 5;
+            }
+        }
+
+        defender.setHp(defender.getHp() - ((attacker.getDamage() * getRandomZeroOne(spellName.getPercentSuccess())) - bonus));
+    }
+
+    //Method that return 0 if random float is less than 1 - percent success or 1 if random float is higher than 1 - percent success
+    public static int getRandomZeroOne(double percentSuccess) {
+        return (rand.nextDouble() >= (1 - percentSuccess)) ? 1 : 0;
     }
 
 

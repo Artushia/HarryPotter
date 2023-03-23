@@ -1,4 +1,4 @@
-package org.isep.java;
+package org.isep.java.model;
 
 public enum Pet {
 

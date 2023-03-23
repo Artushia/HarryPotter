@@ -1,14 +1,13 @@
-package org.isep.java;
+package org.isep.java.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-
 public class House {
 
-    String name;
+    @Getter
+    @Setter
+    private String name;
 
     public House(String name) {
         this.name = name;

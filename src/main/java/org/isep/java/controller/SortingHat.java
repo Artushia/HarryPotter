@@ -1,4 +1,6 @@
-package org.isep.java;
+package org.isep.java.controller;
+
+import org.isep.java.model.House;
 
 import java.util.ArrayList;
 import java.util.List;

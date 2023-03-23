@@ -1,4 +1,6 @@
-package org.isep.java;
+package org.isep.java.view;
+
+import org.isep.java.controller.Logic;
 
 public class Story {
 

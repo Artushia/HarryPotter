@@ -1,9 +1,17 @@
-package org.isep.java;
+package org.isep.java.model;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class Wand {
 
-    private final Core core;
-    private final int size;
+    @Getter
+    @Setter
+    private Core core;
+
+    @Getter
+    @Setter
+    private int size;
 
     //Constructor
     public Wand(Core core, int size) {
