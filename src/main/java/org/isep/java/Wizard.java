@@ -1,46 +1,33 @@
+package org.isep.java;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import static java.lang.System.in;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Wizard extends Character{
 
     //specifications of the character
     String name;
-    private Pet pet;
+    private final Pet pet;
     Wand wand;
     House house;
     List<Spell> knownSpells = new ArrayList<>();
     private final List<Potion> potions = new ArrayList<>();
 
-    //Setters and Getters
-    public void setName(String name) {this.name = name;}
-
-    public void setHouse(House house) {this.house = house;}
-
-    public void setWand(Wand wand) {this.wand = wand;}
-
-    public void setPet(Pet pet) {this.pet = pet;}
-
-    public Wand getWand() {return wand;}
-
-    public String getName() {return name;}
-
-    public List<Spell> getKnownSpells() {return knownSpells;}
-
-    public void addSpell(Spell spell) {knownSpells.add(spell);}
-
-    public void addPotion(Potion potion) {potions.add(potion);}
-
     //Defines the feature of the wizard
-    public Wizard() {
+    public Wizard( int hp , int damage) {
+        super(hp, damage);
 
         //Set Name
         System.out.println("Hello! What is the name of your wizard? ");
         Scanner sc = new Scanner(in);
         this.name = sc.next();
 
-        //Set Wand
+        //Set org.isep.java.Wand
         int size = 0;
         while ((size > 36) || (size < 24)) {
             System.out.println("Choose a size between 24 and 36 cm for your wand: ");
@@ -55,11 +42,12 @@ public class Wizard extends Character{
         Core core = Core.values()[index];
         this.wand = new Wand(core,size);
 
-        //Set House
+        //Set org.isep.java.House
         SortingHat sortingHat = new SortingHat();
-        this.house = sortingHat.pickHouse();
+        this.house = new House("SLYTHERIN");
+        //this.house = sortingHat.pickHouse();
 
-        //Set Pet
+        //Set org.isep.java.Pet
         System.out.println("Enter the number corresponding to the desired pet: ");
         for (int i=0; i<Pet.values().length; i++) {
             System.out.println(i + " -> " + Pet.values()[i]);}
@@ -69,24 +57,39 @@ public class Wizard extends Character{
             chooseValue = sc.nextInt();}
         this.pet = Pet.values()[chooseValue];
 
-        //Set HP
-        this.hp = 100;
-
         //adds Wanguardium Leviosa by default at beginning of game
-        Spell Leviosa = new Spell("Wanguardium Leviosa", 0.85, 25);
+        Spell Leviosa = new Spell("Wanguardium Leviosa", 0.85);
         knownSpells.add(Leviosa);
-    }
 
+
+        //Recap of wizard's characteristic
+        System.out.println("Your wizard : name = " + this.name + ", pet = " + this.pet + ", wand = " + wand + ", house = " + house);
+    }
 
     @Override
-    public String toString() {
-        return "Wizard{" +
-                "name='" + name + '\'' +
-                ", pet=" + pet +
-                ", wand=" + wand +
-                ", house=" + house +
-                '}';
+    public void setHp(int hp) {
+        super.setHp(hp);
     }
+
+    @Override
+    public void setDamage(int damage) {
+        super.setDamage(damage);
+    }
+
+    //checks for house type and adds specificity
+    public void checkHouseForSpecificity() {
+        //Specificity for RAVENCLAW house - are more precise
+        if (this.house.toString().equals("RAVENCLAW")) {
+            for (int i=0; i < this.knownSpells.size(); i++) {
+                double spellSuccess = this.knownSpells.get(i).percentSuccess;
+                if (spellSuccess < 0.95) {spellSuccess += 0.05;}
+            }
+
+            //Specificity for SLYTHERIN house - do higher damage
+        } else if (this.house.toString().equals("SLYTHERIN")) {
+            this.damage += 5;}
+    }
+
 }
 
 

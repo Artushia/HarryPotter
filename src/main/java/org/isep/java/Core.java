@@ -1,3 +1,5 @@
+package org.isep.java;
+
 public enum Core {
 
     DRAGON_HEARTSTRING,

@@ -1,4 +1,4 @@
-import java.util.Scanner;
+package org.isep.java;
 
 public class Wand {
 
@@ -13,6 +13,6 @@ public class Wand {
 
     @Override
     public String toString() {
-        return " Your wand's core is " + core + ", and size is " + size + " cm";
+        return core + " and size " + size + " cm";
     }
 }
