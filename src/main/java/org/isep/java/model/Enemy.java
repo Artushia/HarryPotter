@@ -2,7 +2,6 @@ package org.isep.java.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.isep.java.model.Character;
 
 public class Enemy extends Character {
 

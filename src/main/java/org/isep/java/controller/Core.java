@@ -12,45 +12,47 @@ import java.util.Random;
 import java.util.Scanner;
 
 
-public class Logic {
+public class Core {
 
-    private static Scanner sc = new Scanner(System.in);
-    private static Random rand = new Random();
-
+    private static final Scanner sc = new Scanner(System.in);
+    private static final Random rand = new Random();
 
     public static void main(String[] args) throws IOException {
         exeGame();
     }
 
     public static void exeGame() throws IOException {
-        //Instantiate the wizard's and enemy's classes
+
+        //Instantiate the wizard
         Wizard wizard = new Wizard(100,20);
-        enterToContinue();
+
+        //Instantiate enemy's
         Enemy enemy1 = new Enemy("Troll", 100, 20);
-        Enemy enemy2 = new Enemy("Basilic", 100, 25);
+        Enemy enemy2 = new Enemy("Basilic", 100, 22);
+        Enemy enemy3 = new Enemy("Detraqueurs", 100, 24);
+        Enemy enemy4 = new Enemy("Voldemort&Peter", 100,26 );
+        Enemy enemy5 = new Enemy("Dolores", 100, 28);
+        Enemy enemy6 = new Enemy("Mangemorts", 100, 30);
+        Enemy enemy7 = new Enemy("Voldemort&Bellatrix", 100, 35);
 
-        //org.isep.java.Level 1
+        //Execution of the levels
         clearConsole();
-        Story.firstAct();
-        System.out.println("Your current health: " + wizard.getHp());
-        while (wizard.getHp() > 0) {
-            checkHouseForSpecificity(wizard);
-            System.out.println("Percentage of success is " + wizard.getKnownSpells().get(0).getPercentSuccess());
-            while (enemy1.getHp() > 0) {
-                exeLevel(wizard,enemy1);
-            }
-            Story.winAgainstBoss("Troll", 2);
-            winChoice(wizard);
-            //org.isep.java.Level 2
-            clearConsole();
-            Story.secondAct();
-            System.out.println("Your current health: " + wizard.getHp());
-            while (enemy2.getHp() > 0) {
-                exeLevel(wizard, enemy2);
-            }
-
-        }
+        checkHouseForSpecificity(wizard);
+        executeLevel1(wizard, enemy1);
+        executeLevel2(wizard, enemy2);
+        executeLevel3(wizard, enemy3);
+        executeLevel4(wizard, enemy4);
+        executeLevel5(wizard, enemy5);
+        executeLevel6(wizard, enemy6);
+        executeLevel7(wizard, enemy7);
+        Story.gameOver();
     }
+
+    //Checks if wizard is alive
+    public static boolean isAlive(Character character) {
+        return character.getHp() > 0;
+    }
+
     //checks for house type and adds specificity
     public static void checkHouseForSpecificity(Wizard wizard) {
         //Specificity for RAVENCLAW house - are more precise
@@ -70,7 +72,7 @@ public class Logic {
     }
 
     //General method for the levels
-    public static void exeLevel(Wizard wizard, Enemy enemy) throws IOException {
+    public static void attackLogic(Wizard wizard, Enemy enemy) throws IOException {
         Spell trollSpell = new Spell("trollSpell", 0.95);
         System.out.println("Your turn to attack ! ");
         System.out.println("Which spell do you want to use ? (Enter the correct number)");
@@ -83,13 +85,85 @@ public class Logic {
             System.out.println("Your spell missed the troll!");
         } else {
             System.out.println("You inflicted " + damage + " of damage towards the Troll");}
+            enterToContinue();
         if (enemy.getHp() > 0) {
+            System.out.println("The troll's health before he attack is " + enemy.getHp());
             attack(trollSpell, enemy, wizard);
             System.out.println("The troll's health is " + enemy.getHp());
             System.out.println("He also attacked you ! Your remaining health is " + wizard.getHp());
             enterToContinue();
         }
     }
+
+    public static void executeLevel1(Wizard wizard, Enemy enemy1) throws IOException {
+        Story.firstAct();
+        while (isAlive(wizard) && isAlive(enemy1)) {
+            attackLogic(wizard,enemy1);
+        }
+        Story.winAgainstBoss(enemy1.getName(), 2);
+        winChoice(wizard);
+    }
+
+    public static void executeLevel2(Wizard wizard, Enemy enemy2) throws IOException {
+        clearConsole();
+        Story.secondAct();
+        while (isAlive(wizard) && isAlive(enemy2)) {
+            attackLogic(wizard,enemy2);
+        }
+        Story.winAgainstBoss(enemy2.getName(), 3);
+        winChoice(wizard);
+    }
+
+    public static void executeLevel3(Wizard wizard, Enemy enemy3) throws IOException {
+        clearConsole();
+        Story.firstAct();
+        while (isAlive(wizard) && isAlive(enemy3)) {
+            attackLogic(wizard,enemy3);
+        }
+        Story.winAgainstBoss(enemy3.getName(), 4);
+        winChoice(wizard);
+    }
+
+    public static void executeLevel4(Wizard wizard, Enemy enemy4) throws IOException {
+        clearConsole();
+        Story.firstAct();
+        while (isAlive(wizard) && isAlive(enemy4)) {
+            attackLogic(wizard,enemy4);
+        }
+        Story.winAgainstBoss(enemy4.getName(), 5);
+        winChoice(wizard);
+    }
+
+    public static void executeLevel5(Wizard wizard, Enemy enemy5) throws IOException {
+        clearConsole();
+        Story.firstAct();
+        while (isAlive(wizard) && isAlive(enemy5)) {
+            attackLogic(wizard,enemy5);
+        }
+        Story.winAgainstBoss(enemy5.getName(), 6);
+        winChoice(wizard);
+    }
+
+    public static void executeLevel6(Wizard wizard, Enemy enemy6) throws IOException {
+        clearConsole();
+        Story.firstAct();
+        while (isAlive(wizard) && isAlive(enemy6)) {
+            attackLogic(wizard,enemy6);
+        }
+        Story.winAgainstBoss(enemy6.getName(), 7);
+        winChoice(wizard);
+    }
+
+    public static void executeLevel7(Wizard wizard, Enemy enemy7) throws IOException {
+        clearConsole();
+        Story.firstAct();
+        while (isAlive(wizard) && isAlive(enemy7)) {
+            attackLogic(wizard,enemy7);
+        }
+        Story.finalWin();
+        winChoice(wizard);
+    }
+
 
     //Method in case player wins level
     public static void winChoice(Wizard wizard) {
@@ -98,9 +172,9 @@ public class Logic {
             System.out.println("Enter either 1 or 2: ");
             choice = sc.nextInt();}
         if (choice == 1) {
-            wizard.setHp(wizard.getHp() - 20);
+            wizard.setHp(wizard.getHp() + 50);
         } else {
-            wizard.setDamage(wizard.getDamage() + 10);
+            wizard.setDamage(wizard.getDamage() + 15);
         }
         printSeperator(60);
     }

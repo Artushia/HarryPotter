@@ -1,5 +1,6 @@
 package org.isep.java.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.isep.java.controller.SortingHat;
 import org.isep.java.view.WizardView;
+
+import static org.isep.java.controller.Core.enterToContinue;
 
 public class Wizard extends Character {
 
@@ -36,7 +39,7 @@ public class Wizard extends Character {
     private final List<Potion> potions = new ArrayList<>();
 
     //Defines the feature of the wizard
-    public Wizard( int hp , int damage) {
+    public Wizard( int hp , int damage) throws IOException {
         super(hp, damage);
 
         //Set Name
@@ -49,8 +52,7 @@ public class Wizard extends Character {
 
         //Set org.isep.java.model.House
         SortingHat sortingHat = new SortingHat();
-        this.house = new House("RAVENCLAW");
-        //this.house = sortingHat.pickHouse();
+        this.house = sortingHat.pickHouse();
 
         //Set org.isep.java.model.Pet
         this.pet = WizardView.choosePet();
@@ -62,6 +64,7 @@ public class Wizard extends Character {
 
         //Recap of wizard's characteristic
         System.out.println("Your wizard : name = " + this.name + ", pet = " + this.pet + ", wand = " + wand + ", house = " + house);
+        enterToContinue();
     }
 
 
