@@ -39,8 +39,8 @@ public class Wizard extends Character {
     private final List<Potion> potions = new ArrayList<>();
 
     //Defines the feature of the wizard
-    public Wizard( int hp , int damage) throws IOException {
-        super(hp, damage);
+    public Wizard(int hp) throws IOException {
+        super(hp);
 
         //Set Name
         this.name = WizardView.choseName();
@@ -53,12 +53,13 @@ public class Wizard extends Character {
         //Set org.isep.java.model.House
         SortingHat sortingHat = new SortingHat();
         this.house = sortingHat.pickHouse();
+        //this.house = new House("GRYFFINDOR");
 
         //Set org.isep.java.model.Pet
         this.pet = WizardView.choosePet();
 
         //adds Wanguardium Leviosa by default at beginning of game
-        Spell Leviosa = new Spell("Wanguardium Leviosa", 0.85);
+        Spell Leviosa = new Spell("Wanguardium Leviosa", 0.85, 20);
         knownSpells.add(Leviosa);
 
 

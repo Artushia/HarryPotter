@@ -8,13 +8,10 @@ public abstract class Character {
     @Getter
     @Setter
     private int hp;
-    @Getter
-    @Setter
-    private int damage;
 
-    public Character(int hp, int damage) {
+
+    public Character(int hp) {
         this.hp = hp;
-        this.damage = damage;
     }
 
 }

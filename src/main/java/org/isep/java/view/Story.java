@@ -27,6 +27,59 @@ public class Story {
 
     }
 
+    public static void thirdAct() {
+        Core.printSeperator(60);
+        System.out.println("LEVEL III - The Prisonner of Azkaban");
+        Core.printSeperator(60);
+        System.out.println("The Detraqueurs are somewhere free, in the countryside, the streets.");
+        System.out.println("Thankfully, you heard of a spell that repels them...Expect....Expecta....Oh yes ! ");
+        System.out.println("It is Expectro Patronum. Now that you recall its name, use it to beat the Detraqueurs.");
+        System.out.println("Good luck ! ");
+
+    }
+
+    public static void fourthAct() {
+        Core.printSeperator(60);
+        System.out.println("LEVEL IV - The Goblet of Fire");
+        Core.printSeperator(60);
+        System.out.println("By a lack of luck, you just won the 3 witch tournament...and the right to die.");
+        System.out.println("You are in a cemetery, where lies Voldemort & Peter Pettigrew.");
+        System.out.println("Your only chance of escaping is to get closer to Portkey and attract him (Accio!)");
+        System.out.println("Don't worry ! You will see Voldemort another time.");
+        System.out.println("Good luck ! ");
+
+    }
+
+    public static void fifthAct() {
+        Core.printSeperator(60);
+        System.out.println("LEVEL V - The Order of the Phenix");
+        Core.printSeperator(60);
+        System.out.println("It's the time of BUSE !");
+        System.out.println("Dolores Ombrage watches over the grains. Your goal is to distract her while the fireworks are being set up.");
+        System.out.println("Good luck ! ");
+
+    }
+
+    public static void sixthAct() {
+        Core.printSeperator(60);
+        System.out.println("LEVEL VI - The Half-Blood Prince");
+        Core.printSeperator(60);
+        System.out.println("Mangemorts have attacked Poudlard. Are you ready to defend yourself ?");
+        System.out.println("You will need to attack them from straight ahead (Sectumsempra). If you are from Serpentard, you may join Mangemorts squad. ");
+        System.out.println("Good luck ! ");
+
+    }
+
+    public static void seventhAct() {
+        Core.printSeperator(60);
+        System.out.println("LEVEL VII - The Deathly Hallows");
+        Core.printSeperator(60);
+        System.out.println("End of dithering, you need to attack the problem at its roots. You face Voldemort and Bellatric Lestrange.");
+        System.out.println("Be careful ! They can kill you in one shot using Avada Kedavra if you are not ready.");
+        System.out.println("Good luck ! ");
+
+    }
+
     public static void winAgainstBoss(String bossName, int lvlNumber) {
         Core.printSeperator(60);
         System.out.println("Congrats ! You killed the " + bossName + " ! ");
@@ -49,5 +102,15 @@ public class Story {
         System.out.println("You killed the final boss. You graduated from the most prestigious witchcraft college ! ");
         System.out.println("Hope you enjoyed the game realised by @Arthur Terisse");
         Core.printSeperator(60);
+    }
+
+    public static void youDied() throws InterruptedException {
+        clearConsole();
+        Core.printSeperator(60);
+        System.out.println("The boss killed you.");
+        System.out.println("Thank you for playing Harry Potter at home by @Arthur Terisse");
+        Core.printSeperator(60);
+        Thread.sleep(3000);
+        System.exit(0);
     }
 }

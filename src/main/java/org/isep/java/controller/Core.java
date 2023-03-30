@@ -1,9 +1,7 @@
 package org.isep.java.controller;
 
+import org.isep.java.model.*;
 import org.isep.java.model.Character;
-import org.isep.java.model.Enemy;
-import org.isep.java.model.Spell;
-import org.isep.java.model.Wizard;
 import org.isep.java.view.Story;
 
 import java.io.IOException;
@@ -17,23 +15,32 @@ public class Core {
     private static final Scanner sc = new Scanner(System.in);
     private static final Random rand = new Random();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         exeGame();
     }
 
-    public static void exeGame() throws IOException {
+    public static void exeGame() throws IOException, InterruptedException {
 
         //Instantiate the wizard
-        Wizard wizard = new Wizard(100,20);
+        Wizard wizard = new Wizard(100);
+
+        //Instantiate enemy attacks
+        Spell trollSpell = new Spell("trollSpell", 0.9, 15);
+        Spell basilicSpell = new Spell("basilicSpell", 0.9, 15);
+        Spell detraqueursSpell = new Spell("detraqueursSpell", 0.9, 20);
+        Spell voldemortSpell = new Spell("voldemortSpell", 0.9, 22);
+        Spell doloresSpell = new Spell("doloresSpell", 0.9, 25);
+        Spell mangemortsSpell = new Spell("mangemortsSpell", 0.9, 27);
+        Spell bellatrixSpell = new Spell("Avada Kedavra", 0.2, 100);
 
         //Instantiate enemy's
-        Enemy enemy1 = new Enemy("Troll", 100, 20);
-        Enemy enemy2 = new Enemy("Basilic", 100, 22);
-        Enemy enemy3 = new Enemy("Detraqueurs", 100, 24);
-        Enemy enemy4 = new Enemy("Voldemort&Peter", 100,26 );
-        Enemy enemy5 = new Enemy("Dolores", 100, 28);
-        Enemy enemy6 = new Enemy("Mangemorts", 100, 30);
-        Enemy enemy7 = new Enemy("Voldemort&Bellatrix", 100, 35);
+        Enemy enemy1 = new Enemy("Troll", 100, trollSpell);
+        Enemy enemy2 = new Enemy("Basilic", 100, basilicSpell);
+        Enemy enemy3 = new Enemy("Detraqueurs", 100,detraqueursSpell);
+        Enemy enemy4 = new Enemy("Voldemort&Peter", 100,voldemortSpell);
+        Enemy enemy5 = new Enemy("Dolores", 100,doloresSpell);
+        Enemy enemy6 = new Enemy("Mangemorts", 100,mangemortsSpell);
+        Enemy enemy7 = new Enemy("Voldemort&Bellatrix", 100,bellatrixSpell);
 
         //Execution of the levels
         clearConsole();
@@ -68,100 +75,140 @@ public class Core {
 
             //Specificity for SLYTHERIN house - do higher damage
         } else if (wizard.getHouse().toString().equals("SLYTHERIN")) {
-            wizard.setDamage(wizard.getDamage() + 5);}
+            for (int i=0; i < wizard.getKnownSpells().size(); i++) {
+                Spell spell = wizard.getKnownSpells().get(i);
+                int spellDamage = spell.getDamage();
+                spell.setDamage(spellDamage + 5);
+                }
+        }
     }
 
     //General method for the levels
     public static void attackLogic(Wizard wizard, Enemy enemy) throws IOException {
-        Spell trollSpell = new Spell("trollSpell", 0.95);
         System.out.println("Your turn to attack ! ");
         System.out.println("Which spell do you want to use ? (Enter the correct number)");
 
         //Shows the damage you infliged to the Troll for each attack
         int health = enemy.getHp();
-        attack(wizard.getKnownSpells().get(listOptions(wizard.getKnownSpells())), wizard, enemy);
+        attack(wizard.getKnownSpells().get(listOptions(wizard.getKnownSpells())), enemy);
         int damage = health - enemy.getHp();
         if (damage == 0) {
-            System.out.println("Your spell missed the troll!");
+            System.out.printf("Your spell missed %s !%n", enemy.getName());
         } else {
-            System.out.println("You inflicted " + damage + " of damage towards the Troll");}
-            enterToContinue();
+            System.out.printf("You inflicted %d of damage towards the %s%n",damage, enemy.getName());
+            System.out.printf("%s health is %d%n", enemy.getName(), enemy.getHp());}
         if (enemy.getHp() > 0) {
-            System.out.println("The troll's health before he attack is " + enemy.getHp());
-            attack(trollSpell, enemy, wizard);
-            System.out.println("The troll's health is " + enemy.getHp());
+            attack(enemy.getSpell(), wizard);
             System.out.println("He also attacked you ! Your remaining health is " + wizard.getHp());
             enterToContinue();
         }
     }
 
-    public static void executeLevel1(Wizard wizard, Enemy enemy1) throws IOException {
+    public static void executeLevel1(Wizard wizard, Enemy enemy1) throws IOException, InterruptedException {
         Story.firstAct();
         while (isAlive(wizard) && isAlive(enemy1)) {
             attackLogic(wizard,enemy1);
         }
-        Story.winAgainstBoss(enemy1.getName(), 2);
-        winChoice(wizard);
+        if (isAlive(wizard)) {
+            Story.winAgainstBoss(enemy1.getName(), 2);
+            winChoice(wizard);
+        } else {Story.youDied();}
     }
 
-    public static void executeLevel2(Wizard wizard, Enemy enemy2) throws IOException {
+    public static void executeLevel2(Wizard wizard, Enemy enemy2) throws IOException, InterruptedException {
         clearConsole();
+        if (wizard.getHouse().toString().equals("GRYFFINDOR")) {
+            Spell sword = new Spell("Legendary sword", 0.99, 50);
+            wizard.getKnownSpells().add(sword);
+        } else {
+            Spell accio = new Spell("Accio", 0.95, 10 );
+            wizard.getKnownSpells().add(accio);
+        }
         Story.secondAct();
         while (isAlive(wizard) && isAlive(enemy2)) {
             attackLogic(wizard,enemy2);
         }
-        Story.winAgainstBoss(enemy2.getName(), 3);
-        winChoice(wizard);
+        if (isAlive(wizard)) {
+            Story.winAgainstBoss(enemy2.getName(), 3);
+            winChoice(wizard);
+        } else {Story.youDied();}
     }
 
-    public static void executeLevel3(Wizard wizard, Enemy enemy3) throws IOException {
+    public static void executeLevel3(Wizard wizard, Enemy enemy3) throws IOException, InterruptedException {
         clearConsole();
-        Story.firstAct();
+        Spell expectro = new Spell("Expectro Patronum", 0.87, 30);
+        wizard.getKnownSpells().add(expectro);
+        Story.thirdAct();
         while (isAlive(wizard) && isAlive(enemy3)) {
             attackLogic(wizard,enemy3);
         }
-        Story.winAgainstBoss(enemy3.getName(), 4);
-        winChoice(wizard);
+        if (isAlive(wizard)) {
+            Story.winAgainstBoss(enemy3.getName(), 4);
+            winChoice(wizard);
+        } else {Story.youDied();}
     }
 
-    public static void executeLevel4(Wizard wizard, Enemy enemy4) throws IOException {
+    public static void executeLevel4(Wizard wizard, Enemy enemy4) throws IOException, InterruptedException {
         clearConsole();
-        Story.firstAct();
+        Story.fourthAct();
         while (isAlive(wizard) && isAlive(enemy4)) {
             attackLogic(wizard,enemy4);
         }
-        Story.winAgainstBoss(enemy4.getName(), 5);
-        winChoice(wizard);
+        if (isAlive(wizard)) {
+            Story.winAgainstBoss(enemy4.getName(), 5);
+            winChoice(wizard);
+        } else {Story.youDied();}
     }
 
-    public static void executeLevel5(Wizard wizard, Enemy enemy5) throws IOException {
+    public static void executeLevel5(Wizard wizard, Enemy enemy5) throws IOException, InterruptedException {
+        Random rand = new Random();
         clearConsole();
-        Story.firstAct();
+        Story.fifthAct();
         while (isAlive(wizard) && isAlive(enemy5)) {
             attackLogic(wizard,enemy5);
+            if (rand.nextInt(10) == 0) {
+                enemy5.setHp(0);
+            }
         }
-        Story.winAgainstBoss(enemy5.getName(), 6);
-        winChoice(wizard);
+        if (isAlive(wizard)) {
+            Story.winAgainstBoss(enemy5.getName(), 6);
+            winChoice(wizard);
+        } else {Story.youDied();}
     }
 
-    public static void executeLevel6(Wizard wizard, Enemy enemy6) throws IOException {
+    public static void executeLevel6(Wizard wizard, Enemy enemy6) throws IOException, InterruptedException {
         clearConsole();
-        Story.firstAct();
-        while (isAlive(wizard) && isAlive(enemy6)) {
-            attackLogic(wizard,enemy6);
+        Story.sixthAct();
+        ForbiddenSpell sectumsempra = new ForbiddenSpell("Sectumsempra", 0.99, 100);
+        System.out.println("Do you want to join Mangemorts' rank and use a forbidden spell to kill Mangemorts ? ");
+        System.out.println("0 -> YES");
+        System.out.println("1 -> NO");
+        if ((wizard.getHouse().toString().equals("SLYTHERIN")) && sc.nextInt() == 1) {
+            System.out.println("You used the forbidden spell Sectumsempra !");
+            attack(sectumsempra, enemy6);
+        } else {
+            Story.sixthAct();
+            while (isAlive(wizard) && isAlive(enemy6)) {
+                attackLogic(wizard, enemy6);
+            }
+
         }
-        Story.winAgainstBoss(enemy6.getName(), 7);
-        winChoice(wizard);
+        if (isAlive(wizard)) {
+            Story.winAgainstBoss(enemy6.getName(), 7);
+            winChoice(wizard);
+        } else {Story.youDied();}
     }
 
-    public static void executeLevel7(Wizard wizard, Enemy enemy7) throws IOException {
+    public static void executeLevel7(Wizard wizard, Enemy enemy7) throws IOException, InterruptedException {
         clearConsole();
-        Story.firstAct();
+        Story.seventhAct();
         while (isAlive(wizard) && isAlive(enemy7)) {
             attackLogic(wizard,enemy7);
         }
-        Story.finalWin();
-        winChoice(wizard);
+        if (isAlive(wizard)) {
+            Story.finalWin();
+            winChoice(wizard);
+        } else {Story.youDied();}
     }
 
 
@@ -174,8 +221,11 @@ public class Core {
         if (choice == 1) {
             wizard.setHp(wizard.getHp() + 50);
         } else {
-            wizard.setDamage(wizard.getDamage() + 15);
-        }
+            for (int i=0; i < wizard.getKnownSpells().size(); i++) {
+                Spell spell = wizard.getKnownSpells().get(i);
+                int spellDamage = spell.getDamage();
+                spell.setDamage(spellDamage + 15);
+                }        }
         printSeperator(60);
     }
 
@@ -212,7 +262,7 @@ public class Core {
         }
     }
 
-    public static void attack(Spell spellName, Character attacker, Character defender) {
+    public static void attack(AbstractSpell spellName, Character defender) {
 
         int bonus = 0;
         //Specificity of GRYFFINDOR house -> higher resistance from damage
@@ -221,8 +271,9 @@ public class Core {
                 bonus = 5;
             }
         }
-
-        defender.setHp(defender.getHp() - ((attacker.getDamage() * getRandomZeroOne(spellName.getPercentSuccess())) - bonus));
+        if (getRandomZeroOne(spellName.getPercentSuccess()) == 1) {
+            defender.setHp((defender.getHp() - spellName.getDamage() + bonus));
+        }
     }
 
     //Method that return 0 if random float is less than 1 - percent success or 1 if random float is higher than 1 - percent success

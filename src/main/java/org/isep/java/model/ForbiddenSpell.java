@@ -1,8 +1,8 @@
 package org.isep.java.model;
 
-public class Spell extends AbstractSpell {
+public class ForbiddenSpell extends AbstractSpell {
 
-    public Spell(String name, double percentSuccess, int damage) {
+    public ForbiddenSpell(String name, double percentSuccess, int damage ) {
         this.name = name;
         this.percentSuccess = percentSuccess;
         this.damage = damage;
@@ -10,8 +10,6 @@ public class Spell extends AbstractSpell {
 
     @Override
     public String toString() {
-        return name;
+        return super.toString();
     }
 }
-
-
