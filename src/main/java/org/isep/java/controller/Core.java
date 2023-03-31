@@ -21,6 +21,9 @@ public class Core {
 
     public static void exeGame() throws IOException, InterruptedException {
 
+        //Game intro
+        Story.welcomeUser();
+
         //Instantiate the wizard
         Wizard wizard = new Wizard(100);
 
@@ -85,22 +88,44 @@ public class Core {
 
     //General method for the levels
     public static void attackLogic(Wizard wizard, Enemy enemy) throws IOException {
-        System.out.println("Your turn to attack ! ");
-        System.out.println("Which spell do you want to use ? (Enter the correct number)");
+        System.out.println("Your turn to play !");
+        int cond;
+        int potionStock = wizard.getPotions().size();
+        do { System.out.printf("Do you wish to attack or use a potion ? 1 - attack | 2 - Use a potion (%d left)%n", potionStock);
+            cond = sc.nextInt();
+        } while (cond != 1 && cond != 2);
+        //checks if there are potions left
+        if (cond == 2 && potionStock == 0) {
+            System.out.println("You do not have any potions left. You must attack the enemy.");
+            cond = 1;
+        }
 
-        //Shows the damage you infliged to the Troll for each attack
-        int health = enemy.getHp();
-        attack(wizard.getKnownSpells().get(listOptions(wizard.getKnownSpells())), enemy);
-        int damage = health - enemy.getHp();
-        if (damage == 0) {
-            System.out.printf("Your spell missed %s !%n", enemy.getName());
+        if (cond == 1) {
+            System.out.println("Which spell do you want to use ? (Enter the correct number)");
+            //Shows the damage you infliged to the Troll for each attack
+            int enemyHealth = enemy.getHp();
+            attack(wizard.getKnownSpells().get(listOptions(wizard.getKnownSpells())), enemy);
+            int wizardDamage = enemyHealth - enemy.getHp();
+            if (wizardDamage == 0) {
+                System.out.printf("Your spell missed %s !%n", enemy.getName());
+            } else {
+                System.out.printf("You inflicted %d of damage towards the %s. [His remaining health is %d]%n", wizardDamage, enemy.getName(), enemy.getHp());
+            }
+            if (enemy.getHp() > 0) {
+                int wizardHealth = wizard.getHp();
+                attack(enemy.getSpell(), wizard);
+                int enemyDamage = wizardHealth - wizard.getHp();
+                if (enemyDamage == 0) {
+                    System.out.println("He attacked but missed you");
+                } else {
+                    System.out.printf("%s inflicted %d damage on you. [Your remaining health is %d]%n",enemy.getName(), enemyDamage, wizard.getHp());
+                }
+                enterToContinue();
+            }
         } else {
-            System.out.printf("You inflicted %d of damage towards the %s%n",damage, enemy.getName());
-            System.out.printf("%s health is %d%n", enemy.getName(), enemy.getHp());}
-        if (enemy.getHp() > 0) {
-            attack(enemy.getSpell(), wizard);
-            System.out.println("He also attacked you ! Your remaining health is " + wizard.getHp());
-            enterToContinue();
+            System.out.println("You chose to use a potion...and gain 25 lives");
+            wizard.getPotions().remove(0);
+            wizard.setHp(Math.min(wizard.getHp() + 25, 100));
         }
     }
 
@@ -219,7 +244,7 @@ public class Core {
             System.out.println("Enter either 1 or 2: ");
             choice = sc.nextInt();}
         if (choice == 1) {
-            wizard.setHp(wizard.getHp() + 50);
+            wizard.setHp(Math.min(wizard.getHp() + 50, 100));
         } else {
             for (int i=0; i < wizard.getKnownSpells().size(); i++) {
                 Spell spell = wizard.getKnownSpells().get(i);

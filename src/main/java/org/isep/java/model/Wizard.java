@@ -62,6 +62,14 @@ public class Wizard extends Character {
         Spell Leviosa = new Spell("Wanguardium Leviosa", 0.85, 20);
         knownSpells.add(Leviosa);
 
+        //Add by default 3 potions to list
+        Potion potion1 = new Potion();
+        Potion potion2 = new Potion();
+        Potion potion3 = new Potion();
+
+        potions.add(potion1);
+        potions.add(potion2);
+        potions.add(potion3);
 
         //Recap of wizard's characteristic
         System.out.println("Your wizard : name = " + this.name + ", pet = " + this.pet + ", wand = " + wand + ", house = " + house);

@@ -6,6 +6,15 @@ import static org.isep.java.controller.Core.clearConsole;
 
 public class Story {
 
+    public static void welcomeUser() {
+
+        Core.printSeperator(60);
+        System.out.println("Welcome to Harry Potter at Home !");
+        System.out.println("In this Role Playing Game, you will become a wizard and combat many ennemies...");
+        System.out.println("While you are alive, you continue to fight new ennemies ! There are seven levels so don't die !");
+        Core.printSeperator(60);
+    }
+
     public static void firstAct() {
         Core.printSeperator(60);
         System.out.println("LEVEL I - Dungeon's restroom");
