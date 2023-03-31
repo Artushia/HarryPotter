@@ -15,11 +15,11 @@ public class Core {
     private static final Scanner sc = new Scanner(System.in);
     private static final Random rand = new Random();
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public void main(String[] args) throws IOException, InterruptedException {
         exeGame();
     }
 
-    public static void exeGame() throws IOException, InterruptedException {
+    public void exeGame() throws IOException, InterruptedException {
 
         //Game intro
         Story.welcomeUser();
@@ -59,7 +59,7 @@ public class Core {
     }
 
     //Checks if wizard is alive
-    public static boolean isAlive(Character character) {
+    public boolean isAlive(Character character) {
         return character.getHp() > 0;
     }
 
@@ -129,7 +129,7 @@ public class Core {
         }
     }
 
-    public static void executeLevel1(Wizard wizard, Enemy enemy1) throws IOException, InterruptedException {
+    public void executeLevel1(Wizard wizard, Enemy enemy1) throws IOException, InterruptedException {
         Story.firstAct();
         while (isAlive(wizard) && isAlive(enemy1)) {
             attackLogic(wizard,enemy1);
@@ -140,7 +140,7 @@ public class Core {
         } else {Story.youDied();}
     }
 
-    public static void executeLevel2(Wizard wizard, Enemy enemy2) throws IOException, InterruptedException {
+    public void executeLevel2(Wizard wizard, Enemy enemy2) throws IOException, InterruptedException {
         clearConsole();
         if (wizard.getHouse().toString().equals("GRYFFINDOR")) {
             Spell sword = new Spell("Legendary sword", 0.99, 50);
@@ -159,7 +159,7 @@ public class Core {
         } else {Story.youDied();}
     }
 
-    public static void executeLevel3(Wizard wizard, Enemy enemy3) throws IOException, InterruptedException {
+    public void executeLevel3(Wizard wizard, Enemy enemy3) throws IOException, InterruptedException {
         clearConsole();
         Spell expectro = new Spell("Expectro Patronum", 0.87, 30);
         wizard.getKnownSpells().add(expectro);
@@ -173,7 +173,7 @@ public class Core {
         } else {Story.youDied();}
     }
 
-    public static void executeLevel4(Wizard wizard, Enemy enemy4) throws IOException, InterruptedException {
+    public void executeLevel4(Wizard wizard, Enemy enemy4) throws IOException, InterruptedException {
         clearConsole();
         Story.fourthAct();
         while (isAlive(wizard) && isAlive(enemy4)) {
@@ -185,7 +185,7 @@ public class Core {
         } else {Story.youDied();}
     }
 
-    public static void executeLevel5(Wizard wizard, Enemy enemy5) throws IOException, InterruptedException {
+    public void executeLevel5(Wizard wizard, Enemy enemy5) throws IOException, InterruptedException {
         Random rand = new Random();
         clearConsole();
         Story.fifthAct();
@@ -201,7 +201,7 @@ public class Core {
         } else {Story.youDied();}
     }
 
-    public static void executeLevel6(Wizard wizard, Enemy enemy6) throws IOException, InterruptedException {
+    public void executeLevel6(Wizard wizard, Enemy enemy6) throws IOException, InterruptedException {
         clearConsole();
         Story.sixthAct();
         ForbiddenSpell sectumsempra = new ForbiddenSpell("Sectumsempra", 0.99, 100);
@@ -224,7 +224,7 @@ public class Core {
         } else {Story.youDied();}
     }
 
-    public static void executeLevel7(Wizard wizard, Enemy enemy7) throws IOException, InterruptedException {
+    public void executeLevel7(Wizard wizard, Enemy enemy7) throws IOException, InterruptedException {
         clearConsole();
         Story.seventhAct();
         while (isAlive(wizard) && isAlive(enemy7)) {
@@ -238,7 +238,7 @@ public class Core {
 
 
     //Method in case player wins level
-    public static void winChoice(Wizard wizard) {
+    public void winChoice(Wizard wizard) {
         int choice = 0;
         while ((choice != 1) && (choice != 2)) {
             System.out.println("Enter either 1 or 2: ");
